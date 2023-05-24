@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AJAX</title>
+  <script src="https://kit.fontawesome.com/dc4d371485.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      width: 100%;
+      background-color: beige;
+      height: 60px;
+    }
+
+    .nav-input {
+      float: left;
+      width: 70%;
+      text-align: center
+    }
+
+    input[name="input1"] {
+      font-size: 15px;
+      border: 1px lightgrey solid;
+      padding: 5px;
+      width: 600px;
+      margin: 10px;
+      border-radius: 50px;
+    }
+
+    .fa-magnifying-glass {
+      margin-left: -41px;
+      padding: 5px;
+      background-color: cornflowerblue;
+      color: white;
+      border-radius: 50px;
+    }
+
+    .shopping-cart {
+      width: 20%;
+      float: right;
+      margin: 10px;
+      text-align: right;
+    }
+
+    .fa-cart-shopping {
+      font-size: 30px;
+      text-decoration: white;
+      color: cornflowerblue;
+      float: left;
+    }
+
+    #itemcount {
+      position: relative;
+      right: -25px;
+      top: 1px;
+      z-index: 1;
+      color: white;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+      float: right;
+    }
+
+
+    #container {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 30px;
+      text-align: center;
+      background-color: rgb(250, 246, 246);
+    }
+
+    .item {
+      border: 1px solid rgb(236, 236, 236);
+      color: darkblue;
+      font-size: 30px;
+      width: 300px;
+      padding: 5px;
+      margin: 5px;
+    }
+
+    p {
+      color: gray;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+
+    input[type="button"] {
+      border: 1px #6feb09 solid;
+      padding: 5px;
+      width: 200px;
+      margin: 10px;
+      background-color: #6feb09;
+      color: white;
+    }
+
+    img {
+      width: 150px;
+      height: 150px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-input">
+      <input name="input1" type="search" id="prod" onchange="check(event)" placeholder="What are you loading for?">
+      <i class="fa-solid fa-magnifying-glass" onclick="getProductById()"></i>
+    </div>
+
+    <div class="shopping-cart">
+      <a href="./shopping_cart.html"> <i class="fa-solid fa-cart-shopping"></i>Cart</a>
+      <span id='itemcount'></span>
+    </div>
+  </nav>
+
+  <br clear="both">
+  <main>
+    <div id="container">
+    </div>
+  </main>
+  <script src="./script.js"></script>
+</body>
+
+</html>

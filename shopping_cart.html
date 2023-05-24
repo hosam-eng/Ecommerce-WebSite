@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: rgb(240, 239, 239);
+    }
+
+    #container {
+      width: 60%;
+      display: block;
+      margin: 30px;
+      text-align: center;
+      float: left;
+      background-color: white;
+      padding: 30px;
+    }
+
+    #Bill {
+      width: 400px;
+      height: 425px;
+      background-color: white;
+      border: 1px solid lightgray;
+      float: left;
+      margin-top: 30px;
+    }
+
+    #totalAmount {
+      background-color: rgb(236, 234, 234);
+      border-radius: 0px 0px 10px 10px;
+      height: 100px;
+    }
+
+    h2,
+    h5 {
+      float: left;
+    }
+
+    #currency {
+      color: rgb(105, 104, 104);
+      position: relative;
+      top: 15px;
+      left: 10px;
+      font-size: 30px;
+    }
+
+    #currency1 {
+      position: relative;
+      top: 38px;
+      left: 10px;
+      font-size: 30px;
+    }
+
+    .item {
+      border: 1px solid rgb(236, 236, 236);
+      color: darkblue;
+      font-size: 30px;
+      width: 700px;
+      height: 300px;
+      padding: 5px;
+      margin: 5px;
+      text-align: left;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+      float: left;
+    }
+
+    p {
+      color: gray;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-left: 120px;
+    }
+
+    h5 {
+      margin-left: 20px;
+    }
+
+    input[type="button"] {
+      background: none !important;
+      border: none;
+      padding: 0 !important;
+      font-size: 20px;
+      /*optional*/
+      font-family: arial, sans-serif;
+      /*input has OS specific font-family*/
+      color: #069;
+      text-decoration: none;
+      cursor: pointer;
+      margin-left: 120px;
+    }
+
+    button {
+      border: 1px #6feb09 solid;
+      padding: 8px;
+      font-size: 20px;
+      width: 400px;
+      margin-top: 5px;
+      background-color: #6feb09;
+      border-radius: 5px;
+      color: white;
+      margin-top: 300px;
+    }
+
+    select {
+      float: right;
+      margin: 20px 100px;
+      width: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div id="container">
+    </div>
+    <div id="Bill">
+      <div id="totalAmount">
+        <span>Total:</span>
+        <br clear="both">
+        <h2 id="total"></h2>
+        <span id="currency">EGP</span>
+      </div>
+      <button>Proceed To Checkout</button>
+    </div>
+  </main>
+
+  <script>
+
+    document.onload = getLSItems()
+
+    var totalprice = 0.00
+    function getLSItems() {
+      keys = Object.values(localStorage)
+      for (const item of keys) {
+        productById(item)
+      }
+    }
+
+    function totalAmount(price, flag) {
+      if (flag)
+        totalprice += price
+      else
+        totalprice -= price
+      var Total = document.getElementById("total")
+      Total.textContent = totalprice
+    }
+
+    function productById(id) {
+      var xhr = new XMLHttpRequest()
+      xhr.open("get", "https://fakestoreapi.com/products/" + id)
+      xhr.send()
+      try {
+        xhr.addEventListener("readystatechange", function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            var response = JSON.parse(xhr.response)
+            var divContainer = document.getElementById("container")
+            displayCartItem(response)
+          }
+        })
+      }
+      catch
+      {
+        return xhr.status
+      }
+    }
+
+    function displayCartItem(res) { //product
+      var divContainer = document.getElementById("container")
+      var title = res.title
+      var price = res.price
+      var imgPrd = res.image
+      var id = res.id
+      var description = res.description
+      var category = res.category
+      var divProd = createProduct(id, title, price, imgPrd, description, category)
+      totalAmount(price, true)
+      divContainer.innerHTML += divProd
+    }
+
+    function createProduct(id, title, price, imgPrd, description, category) {
+      var divProd = `
+   <div class='item' id="${id}">
+     <img src=${imgPrd}>
+     <p>${title}</p>
+     <select onchange='getQyt(event)'><option value=1>1</option><option value=2>2</option><option value=3>3</option>
+      <option value=4>4</option><option value=5>5</option></select>
+     <h5 id="price">${price}</h5>
+     <span id="currency1">EGP</span>
+     <br clear="both">
+     <p>${description}</p>
+     <p>${category}</p>
+     <div>
+       <input type='button' name=${id} onClick="DeletItem(event,${id})" value="Delete"/>
+     </div>
+   </div> 
+   `
+      return divProd
+    }
+
+    function DeletItem(e, id) {
+      var divProd = document.getElementById(id)
+      var price = document.getElementById("price")
+      keys = Object.keys(localStorage)
+      for (const item of keys) {
+        if (localStorage[item] == id) {
+          localStorage.removeItem(item)
+          totalAmount(parseFloat(price.innerHTML), false)
+          divProd.remove()
+        }
+      }
+    }
+    
+    function getQyt(e) {
+      var totaldiv = document.getElementById("total")
+      totaldiv.textContent = totalprice * e.target.value
+    }
+
+  </script>
+
+</body>
+
+</html>
